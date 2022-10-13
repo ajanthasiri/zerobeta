@@ -1,0 +1,7 @@
+github link : https://github.com/ajanthasiri/zerobeta.git
+
+
+These microservices are belongs to a variant of the service-oriented architectural (SOA) style.
+They are highly maintainable and testable.
+They are created with Asynchronous Messaging Design Pattern.
+They can communicate each other by passing messages.

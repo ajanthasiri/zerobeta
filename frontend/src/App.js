@@ -4,7 +4,7 @@ import Home from './components/Home.js';
 import Register from './components/Register';
 import OrderList from './components/OrderList';
 import ClientHome from './components/ClientHome';
-import {BrowserRouter, Routes, Route} from 'react-router-dom';
+import {BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
     return (

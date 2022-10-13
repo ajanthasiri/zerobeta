@@ -37,11 +37,17 @@ export default function Register() {
             setColor("red");
             setMessage("Fill all details!");
             setMessageShow(true);
+            setTimeout(function() {
+                setMessageShow(false);
+            }.bind(this), 2000);
         }
         else if(password!=passwordConfirm){
             setColor("red");
             setMessage("Password confirm mismatch!");
             setMessageShow(true);
+            setTimeout(function() {
+                setMessageShow(false);
+            }.bind(this), 2000);
         }
         else{
             axios.post('http://localhost:8080/user/saveUser', {
@@ -56,11 +62,18 @@ export default function Register() {
                 setColor("#46b800");
                 setMessage("Created user successfully!");
                 setMessageShow(true);
+                setTimeout(function() {
+                    setMessageShow(false);
+                }.bind(this), 2000);
                 console.log(result);
             })
             .catch(error => {
-                setMessageShow(true);
+                setColor("red");
                 setMessage("Error!");
+                setMessageShow(true);
+                setTimeout(function() {
+                    setMessageShow(false);
+                }.bind(this), 2000);
                 console.log(error);
             });
         }

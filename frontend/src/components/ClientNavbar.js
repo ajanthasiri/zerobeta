@@ -1,6 +1,11 @@
 import React from 'react'
 
 export default function ClientNavbar() {
+    const logout= (e) => {
+        sessionStorage.setItem("token", '');
+        sessionStorage.setItem("id", '');
+        window.location.href="/";
+    }
     return (
         <div>
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -20,7 +25,7 @@ export default function ClientNavbar() {
                                 <a class="nav-link active" aria-current="page" href="/order_list">View Orders</a>
                             </li>
                         </ul>
-                        <a class="nav-link active" aria-current="page" href="#">Logout</a>
+                        <button type="button" onClick={logout} class="btn btn-secondary">Logout</button>
                     </div>
                 </div>
             </nav>

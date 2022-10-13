@@ -4,12 +4,15 @@ import {useState} from 'react';
 import axios from 'axios';
 
 export default function ClientHome() {
-
+    var token='Bearer '+sessionStorage.getItem("token");
+    var id=sessionStorage.getItem("id");
     const [itemName, setItemName] = useState('');
     const [quantity, setQuantity] = useState('');
     const [totalCost, setTotalCost] = useState('');
     const [shippingAddress, setShippingAddress] = useState('');
-    const [message, setMessage] = useState(null)
+    const [messageShow, setMessageShow] = useState(null);
+    const [message, setMessage] = useState('');
+    const [color, setColor] = useState('');
     const handleItemName = (e) => {
         setItemName(e.target.value);
     }
@@ -23,21 +26,57 @@ export default function ClientHome() {
         setShippingAddress(e.target.value);
     }
     const submit = (e) => {
-        axios.post('http://localhost:8080/api/v1/user/saveUser', {
-            itemName: itemName,
-            quantity: quantity,
-            totalCost: totalCost,
-            shippingAddress: shippingAddress,
-        })
-            .then(result => {
-                setMessage("success");
-                console.log(result);
+        
+
+        if(itemName=='' || totalCost=='' || quantity=='' || shippingAddress==''){
+            setColor("red");
+            setMessage("Fill all details!");
+            setMessageShow(true);
+            setTimeout(function() {
+                setMessageShow(false);
+            }.bind(this), 2000);
+        }
+        else{
+            axios.post('http://localhost:8080/order/saveOrder', {
+                headers: {
+                    'authorization': token,
+                    'Accept' : 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                itemName: itemName,
+                clientId:id,
+                quantity: quantity,
+                totalCost: totalCost,
+                shippingAddress: shippingAddress,
+                orderStatus:1,
             })
-            .catch(error => {
-                setMessage("error");
-                console.log(error);
-            });
+                .then(result => {
+                    setColor("#46b800");
+                    setMessage("Placed order successfully!");
+                    setMessageShow(true);
+                    console.log(result);
+                    setTimeout(function() {
+                        setMessageShow(false);
+                    }.bind(this), 2000);
+                })
+                .catch(error => {
+                    setColor("red");
+                    setMessage("Error!");
+                    setMessageShow(true);
+                    setTimeout(function() {
+                        setMessageShow(false);
+                    }.bind(this), 2000);
+                    console.log(error);
+                });
+        }
+        
+
     }
+    const Results = () => (
+        <h4 id="results" className="search-results" style={{color:color}}>
+          {message}
+        </h4>
+      )
 
     return (
         <div>
@@ -45,6 +84,7 @@ export default function ClientHome() {
             <h1>Create Order</h1>
             <div class="col-4" style={{margin: "auto", textAlign: 'left'}}>
                 <form>
+                { messageShow ? <Results /> : null }
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Item Name</label>
                         <input type="text" class="form-control" value={itemName} onChange={handleItemName} id="itemName"
@@ -65,8 +105,9 @@ export default function ClientHome() {
                         <input type="text" class="form-control" value={shippingAddress} onChange={handleShippingAddress}
                                id="shippingAddress" aria-describedby="emailHelp"/>
                     </div>
-                    <button type="submit" onClick={submit} class="btn btn-primary">Submit</button>
                 </form>
+                    <button type="submit" onClick={submit} class="btn btn-primary">Submit</button>
+                
             </div>
         </div>
     )
